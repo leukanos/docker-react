@@ -3,8 +3,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t leukanossearchspring/docker-react
-    -f Dockerfile.dev .
+  - docker build -t leukanossearchspring/docker-react -f Dockerfile.dev .
 
 script:
   - docker run -e CI=true leukanossearchspring/docker-react yarn test
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: eu-central-1
+  app: docker-react
+  env: DockerReact-env
+  bucket_name: elasticbeanstalk-eu-central-1-820805567935
+  bucket_path: docker-react
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
